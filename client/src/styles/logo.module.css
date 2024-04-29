@@ -1,0 +1,49 @@
+.logo {
+  width: 8rem;
+  height: 8rem;
+  animation: drop 1s linear;
+}
+
+@media screen and (max-width: 480px) {
+  .logo {
+    width: 6rem;
+    height: 6rem;
+    animation: dropSm 1s linear;
+  }
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(-150%) rotateY(180deg);
+    width: 4rem;
+  }
+
+  40% {
+    transform: translateY(0) rotateY(180deg);
+    width: 8rem;
+  }
+  50% {
+    transform: translateY(-20%) rotateY(180deg);
+  }
+  60% {
+    transform: translateY(0) rotateY(180deg);
+  }
+}
+
+@keyframes dropSm {
+  0% {
+    transform: translateY(-150%) rotateY(180deg);
+    width: 3rem;
+  }
+
+  40% {
+    transform: translateY(0) rotateY(180deg);
+    width: 6rem;
+  }
+  50% {
+    transform: translateY(-20%) rotateY(180deg);
+  }
+  60% {
+    transform: translateY(0) rotateY(180deg);
+  }
+}
