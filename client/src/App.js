@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "leaflet/dist/leaflet.css";
 import Prediction from "./pages/Prediction";
 import FetchUserData from "./pages/FetchUserData";
+import History from "./pages/History";
+import Info from "./pages/Info";
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/prediction" element={<Prediction />} />
+        <Route path="/prediction/:id" element={<Prediction />} />
+        <Route path="/history/:id" element={<Info />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </div>
   );

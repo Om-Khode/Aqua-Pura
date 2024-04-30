@@ -66,9 +66,6 @@ export default function Map({ position, setPosition }) {
           draggable={true}
           icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
           eventHandlers={{
-            click: (e) => {
-              console.log("marker clicked", e);
-            },
             mouseup: (e) => {
               handleMarkerDrag(e);
             },

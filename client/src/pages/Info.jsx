@@ -17,43 +17,14 @@ import {
 import ChemicalInputFields from "../components/prediction/ChemicalInputFields";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getInfo } from "../utils/fetchInfo";
-import { useLocation } from "react-router-dom";
 import Loader from "../components/loader/Loader";
 
-export default function Prediction() {
-  const [showMap, setShowMap] = useState(true);
-
+export default function Info() {
   const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 });
 
   const [fetched, setFetched] = useState(false);
-
-  const location = useLocation();
-
-  const fetchInfo = async () => {
-    setFetched(false);
-    const id = location.pathname.split("/")[2];
-    if (!id) {
-      setFetched(true);
-      return;
-    }
-    const res = await getInfo(id);
-    if (res.success) {
-      setForm(res.data);
-      setPosition({
-        lat: res.data.latitude.value,
-        lng: res.data.longitude.value,
-      });
-      setFetched(true);
-    } else {
-      toast.error(res.msg);
-    }
-  };
-
-  useEffect(() => {
-    fetchInfo();
-    // eslint-disable-next-line
-  }, []);
 
   const [form, setForm] = useState({
     longitude: { value: 0 },
@@ -73,52 +44,39 @@ export default function Prediction() {
     k: { value: 0, unit: "µS/cm" },
     f: { value: 0, unit: "µS/cm" },
     sio2: { value: 0, unit: "µS/cm" },
+    result: 0,
   });
 
   const format = (val) => val + `°`;
 
-  useEffect(() => {
-    if (showMap) {
-      setForm({
-        ...form,
-        longitude: { value: parseFloat(position.lng).toFixed(2) },
-        latitude: { value: parseFloat(position.lat).toFixed(2) },
-      });
-    }
+  const location = useLocation();
 
-    // eslint-disable-next-line
-  }, [position]);
-
-  useEffect(() => {
-    if (!showMap) {
+  const fetchInfo = async () => {
+    const id = location.pathname.split("/")[2];
+    if (!id) return;
+    const res = await getInfo(id);
+    if (res.success) {
+      setForm(res.data);
       setPosition({
-        lat: parseFloat(form.latitude.value),
-        lng: parseFloat(form.longitude.value),
+        lat: res.data.latitude.value,
+        lng: res.data.longitude.value,
       });
+      setFetched(true);
+    } else {
+      toast.error(res.msg);
     }
+  };
 
+  useEffect(() => {
+    fetchInfo();
     // eslint-disable-next-line
-  }, [form.latitude, form.longitude]);
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        process.env.REACT_APP_URL + "/api/predictions/addprediction",
-        form,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res);
-      if (res.data.success) {
-        toast.success(res.data.msg);
-      } else {
-        toast.error(res.data.msg);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    const id = location.pathname.split("/")[2];
+    navigate("/prediction/" + id);
   };
 
   return (
@@ -142,12 +100,10 @@ export default function Prediction() {
                 <Stack spacing={{ base: "2", md: "" }} textAlign="center">
                   <Heading size={{ base: "lg" }}>Well Prediction</Heading>
                 </Stack>
-                <form onSubmit={handleSubmit}>
-                  {showMap && (
-                    <div>
-                      <Map position={position} setPosition={setPosition} />
-                    </div>
-                  )}
+                <form>
+                  <div>
+                    <Map position={position} setPosition={setPosition} />
+                  </div>
                   <Stack mb={4} mt={8}>
                     <Box
                       bg={"bg.surface"}
@@ -186,19 +142,10 @@ export default function Prediction() {
                               <NumberInput
                                 precision={2}
                                 value={format(form.latitude.value)}
-                                onChange={(valueString) => {
-                                  setForm({
-                                    ...form,
-                                    latitude: { value: valueString },
-                                  });
-                                }}
-                                isDisabled={showMap}
+                                isReadOnly
+                                onFocus={(e) => e.target.blur()}
                               >
-                                <NumberInputField className="disabled:border-gray-400" />
-                                <NumberInputStepper>
-                                  <NumberIncrementStepper />
-                                  <NumberDecrementStepper />
-                                </NumberInputStepper>
+                                <NumberInputField />
                               </NumberInput>
                             </Flex>
                           </Box>
@@ -217,49 +164,55 @@ export default function Prediction() {
                               <NumberInput
                                 precision={2}
                                 value={format(form.longitude.value)}
-                                onChange={(valueString) => {
-                                  setForm({
-                                    ...form,
-                                    longitude: { value: valueString },
-                                  });
-                                }}
-                                isDisabled={showMap}
+                                isReadOnly
+                                onFocus={(e) => e.target.blur()}
                               >
-                                <NumberInputField className="disabled:border-gray-400" />
-                                <NumberInputStepper>
-                                  <NumberIncrementStepper />
-                                  <NumberDecrementStepper />
-                                </NumberInputStepper>
+                                <NumberInputField />
                               </NumberInput>
                             </Flex>
                           </Box>
                         </Flex>
-
-                        <Button
-                          onClick={() => {
-                            setShowMap(!showMap);
-                          }}
-                        >
-                          {showMap
-                            ? "Enter Coordinates Manually"
-                            : "Use Map to Enter Coordinates"}
-                        </Button>
                       </Flex>
                     </Box>
                   </Stack>
                   <Stack>
-                    <ChemicalInputFields form={form} setForm={setForm} />
+                    <ChemicalInputFields
+                      form={form}
+                      setForm={setForm}
+                      info={true}
+                    />
                   </Stack>
-                  <Stack spacing="6">
+                  <Stack mt={6} w={"fit-content"} mx={"auto"}>
+                    <Box
+                      bg={"bg.surface"}
+                      border={"1px solid"}
+                      borderColor={"gray.300"}
+                      px={{ base: "6", md: "6" }}
+                      py={{ base: "3", md: "3" }}
+                      borderRadius={{ base: "lg", md: "xl" }}
+                    >
+                      <Flex justify={"center"} align={"flex-end"}>
+                        <FormLabel htmlFor="prediction" w={"5rem"}>
+                          Prediction:
+                        </FormLabel>
+                        <NumberInput
+                          precision={2}
+                          isReadOnly
+                          value={form.prediction}
+                        >
+                          <NumberInputField />
+                        </NumberInput>
+                      </Flex>
+                    </Box>
                     <Button
                       bg="blue.500"
                       color="white"
-                      type="submit"
                       mt={12}
                       w={80}
                       mx={"auto"}
+                      onClick={handleClick}
                     >
-                      Submit
+                      Retrive this well prediction
                     </Button>
                   </Stack>
                 </form>

@@ -6,74 +6,99 @@ import {
   Flex,
   Select,
   Box,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
+import PhSlider from "./PhSlider";
 
 const InputField = ({
   label,
   value,
   onChange,
   options,
+  selected,
   onSelect,
+  info,
   ...props
-}) => (
-  <Box
-    bg={"bg.surface"}
-    border={"1px solid"}
-    borderColor={"gray.300"}
-    px={{ base: "6", md: "6" }}
-    py={{ base: "3", md: "3" }}
-    borderRadius={{ base: "lg", md: "xl" }}
-  >
-    <Flex align={"flex-end"} justify={"center"}>
-      <FormLabel htmlFor={label} w={"3rem"}>
-        {label}
-      </FormLabel>
-      <NumberInput {...props} value={value} onChange={onChange} w={"7rem"}>
-        <NumberInputField borderRightRadius={0} />
-      </NumberInput>
-      {options && (
-        <Select
-          w={"7rem"}
-          bg={"blue.500"}
-          color={"white"}
-          variant={"filled"}
-          defaultValue={options[0]}
-          borderLeftRadius={0}
-          _hover={{ bg: "blue.600" }}
-          _focus={{ bg: "blue.600" }}
-          onChange={(e) => onSelect(e.target.value)}
-        >
-          {options.map((option) => (
-            <option key={option} value={option} className="text-black">
-              {option}
-            </option>
-          ))}
-        </Select>
-      )}
-    </Flex>
-  </Box>
-);
+}) => {
+  const format = (val) => (selected ? val + " " + selected : val);
+  return (
+    <GridItem>
+      <Box
+        bg={"bg.surface"}
+        border={"1px solid"}
+        borderColor={"gray.300"}
+        px={{ base: "2", md: "6" }}
+        py={{ base: "2", md: "3" }}
+        borderRadius={{ base: "lg", md: "xl" }}
+        w={"100%"}
+      >
+        <Flex align={"flex-end"} justify={"center"}>
+          <FormLabel htmlFor={label} w={"20%"} textAlign={"right"}>
+            {label}
+          </FormLabel>
+          <NumberInput
+            {...props}
+            value={!info ? value : format(value)}
+            isReadOnly={info}
+            onFocus={(e) => info && e.target.blur()}
+            onChange={!info ? onChange : () => {}}
+            w={"42%"}
+            min={0}
+            max={999999}
+          >
+            <NumberInputField borderRightRadius={0} />
+          </NumberInput>
+          {!info && options && (
+            <Select
+              w={"38%"}
+              bg={"blue.500"}
+              color={"white"}
+              variant={"filled"}
+              defaultValue={selected}
+              borderLeftRadius={0}
+              _hover={{ bg: "blue.600" }}
+              _focus={{ bg: "blue.600" }}
+              onChange={(e) => onSelect(e.target.value)}
+            >
+              {options.map((option) => (
+                <option key={option} value={option} className="text-black">
+                  {option}
+                </option>
+              ))}
+            </Select>
+          )}
+        </Flex>
+      </Box>
+    </GridItem>
+  );
+};
 
-const ChemicalInputFields = ({ form, setForm }) => {
-  const options = ["µS/cm", "mS/cm", "dS/m", "meq/L"];
+const ChemicalInputFields = ({ form, setForm, info = false }) => {
+  const mUnits = ["µS/cm", "mS/cm", "dS/m"];
+  const lUnits = ["mg/L", "meq/L"];
 
   return (
-    <Flex
-      wrap={"wrap"}
-      justify={{ base: "center", md: "center" }}
-      align={"center"}
-      gap={5}
-      w={"100%"}
-      mx={"auto"}
+    <Grid
+      templateColumns={{
+        base: "repeat(1, 1fr)",
+        sm: "repeat(1, 1fr)",
+        md: "repeat(1, 1fr)",
+        lg: "repeat(2, 1fr)",
+        xl: "repeat(3, 1fr)}",
+      }}
+      gap={6}
     >
-      <InputField
+      <PhSlider form={form} setForm={setForm} info={info} />
+      {/* <InputField
         label="pH:"
         name="ph"
         value={form.ph.value}
         onChange={(valueString) => {
           setForm({ ...form, ph: { value: valueString, unit: form.ph.unit } });
         }}
-      />
+        info={info}
+      /> */}
       <InputField
         label="EC:"
         name="ec"
@@ -81,11 +106,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, ec: { value: valueString, unit: form.ec.unit } });
         }}
-        options={options}
+        options={mUnits}
+        selected={form.ec.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, ec: { value: form.ec.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="CO3:"
@@ -97,11 +124,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
             co3: { value: valueString, unit: form.co3.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.ec.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, co3: { value: form.co3.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="HCO3:"
@@ -113,11 +142,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
             hco3: { value: valueString, unit: form.hco3.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.hco3.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, hco3: { value: form.hco3.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="Cl:"
@@ -126,11 +157,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, cl: { value: valueString, unit: form.cl.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.cl.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, cl: { value: form.cl.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="SO4:"
@@ -142,11 +175,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
             so4: { value: valueString, unit: form.so4.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.so4.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, so4: { value: form.so4.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="NO3:"
@@ -158,11 +193,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
             no3: { value: valueString, unit: form.no3.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.no3.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, no3: { value: form.no3.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="PO4:"
@@ -174,11 +211,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
             po4: { value: valueString, unit: form.po4.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.po4.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, po4: { value: form.po4.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="TH:"
@@ -187,11 +226,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, th: { value: valueString, unit: form.th.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.th.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, th: { value: form.th.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="Ca:"
@@ -200,11 +241,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, ca: { value: valueString, unit: form.ca.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.ca.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, ca: { value: form.ca.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="Mg:"
@@ -213,11 +256,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, mg: { value: valueString, unit: form.mg.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.mg.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, mg: { value: form.mg.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="Na:"
@@ -226,11 +271,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, na: { value: valueString, unit: form.na.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.na.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, na: { value: form.na.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="K:"
@@ -239,11 +286,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, k: { value: valueString, unit: form.k.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.k.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, k: { value: form.k.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="F:"
@@ -252,11 +301,13 @@ const ChemicalInputFields = ({ form, setForm }) => {
         onChange={(valueString) => {
           setForm({ ...form, f: { value: valueString, unit: form.f.unit } });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.f.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, f: { value: form.f.value, unit: e } });
         }}
+        info={info}
       />
       <InputField
         label="SiO2:"
@@ -268,13 +319,15 @@ const ChemicalInputFields = ({ form, setForm }) => {
             sio2: { value: valueString, unit: form.sio2.unit },
           });
         }}
-        options={options}
+        options={lUnits}
+        selected={form.sio2.unit}
         onSelect={(e) => {
           console.log(e);
           setForm({ ...form, sio2: { value: form.sio2.value, unit: e } });
         }}
+        info={info}
       />
-    </Flex>
+    </Grid>
   );
 };
 

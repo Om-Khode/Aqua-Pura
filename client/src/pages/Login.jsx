@@ -77,7 +77,7 @@ export default function Login() {
         toast.error(res.data.msg);
       }
     } catch (error) {
-      console.log(error); // error.response.data.msg
+      console.log(error);
     }
   };
 

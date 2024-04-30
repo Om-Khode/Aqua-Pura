@@ -1,0 +1,59 @@
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  padding-top: 2rem;
+}
+
+.logo {
+  width: 8rem;
+  height: 8rem;
+  animation: drop 2s ease-in infinite;
+}
+
+@media screen and (max-width: 480px) {
+  .logo {
+    width: 6rem;
+    height: 6rem;
+    animation: dropSm 2s ease-in infinite;
+  }
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(-100%) rotateY(0deg);
+    width: 7rem;
+  }
+
+  80% {
+    transform: translateY(0) rotateY(540deg);
+    width: 8rem;
+  }
+  100% {
+    transform: translateY(-100%) rotateY(720deg);
+    width: 7rem;
+  }
+}
+
+@keyframes dropSm {
+  0% {
+    transform: translateY(-100%) rotateY(0deg);
+    width: 5rem;
+  }
+
+  80% {
+    transform: translateY(0) rotateY(540deg);
+    width: 6rem;
+  }
+  100% {
+    transform: translateY(-100%) rotateY(720deg);
+    width: 5rem;
+  }
+}
