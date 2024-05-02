@@ -12,6 +12,7 @@ export default function FetchUserData() {
         process.env.REACT_APP_URL + "/api/auth/getuser",
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
         }
       );
       console.log(res);

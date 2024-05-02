@@ -77,6 +77,7 @@ export default function Login() {
         form,
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
         }
       );
       if (res.data.success) {
