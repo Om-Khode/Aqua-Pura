@@ -15,14 +15,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log(error);
-  }
-});
-
 const sendVerficationMail = async (email, url, res, verify) => {
   try {
+    await new Promise((resolve, reject) => {
+      transporter.verify((error, success) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          console.log("Server is ready to take our messages");
+          resolve(success);
+        }
+      });
+    });
+
     const mailOptions = {
       from: "Aqua Pura",
       to: email,
@@ -38,7 +44,17 @@ const sendVerficationMail = async (email, url, res, verify) => {
       ],
     };
 
-    transporter.sendMail(mailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          console.log("Email sent: " + info.response);
+          resolve(info.response);
+        }
+      });
+    });
 
     return res.status(200).json({
       success: true,
