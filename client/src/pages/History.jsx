@@ -51,6 +51,7 @@ export default function History() {
         process.env.REACT_APP_URL + "/api/predictions/fetchallpredictions",
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
         }
       );
       console.log(res.data);
@@ -86,6 +87,7 @@ export default function History() {
         process.env.REACT_APP_URL + "/api/predictions/deleteprediction",
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
           data: {
             id: toDeleleteId,
           },

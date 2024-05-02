@@ -76,6 +76,7 @@ export default function ResetPassword() {
         form,
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
         }
       );
       if (res.data.success) {

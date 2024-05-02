@@ -129,6 +129,7 @@ export default function Prediction() {
         form,
         {
           withCredentials: true,
+          url: process.env.REACT_APP_URL,
         }
       );
       console.log(res);

@@ -6,6 +6,7 @@ export const getInfo = async (id) => {
       process.env.REACT_APP_URL + "/api/predictions/fetchprediction/" + id,
       {
         withCredentials: true,
+        url: process.env.REACT_APP_URL,
       }
     );
     return res.data;
