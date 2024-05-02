@@ -11,6 +11,7 @@ connectToMongo();
 
 const app = express();
 
+// Enable Cors
 app.use(
   cors({
     origin: process.env.REACT_APP_URL,
