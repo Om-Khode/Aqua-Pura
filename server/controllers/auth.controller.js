@@ -231,7 +231,6 @@ const logoutUser = async (req, res) => {
       maxAge: 0, // Set maxAge to 0 to expire immediately
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production",
-      expires: new Date(Date.now() - 1000), // Set expires to a past date
     });
     res.status(200).send({ success: true, msg: "Logged out successfully!" });
   } catch (error) {

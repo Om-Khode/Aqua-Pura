@@ -14,6 +14,8 @@ export default function FetchUserData() {
           withCredentials: true,
         }
       );
+      console.log(res);
+
       if (res.data.success) {
         dispatch(login(res.data.user));
       } else {
