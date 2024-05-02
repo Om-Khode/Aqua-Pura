@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://aqua-pura.vercel.app/"],
+    origin: process.env.REACT_APP_URL,
     credentials: true,
     allowedHeaders: [
       "Content-Type",
