@@ -119,6 +119,13 @@ const loginUser = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "Invalid credentials" });
     }
+
+    if (!user.verified) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Please verify your account first!" });
+    }
+
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
       return res
