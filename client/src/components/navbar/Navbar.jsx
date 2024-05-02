@@ -126,7 +126,7 @@ export default function Navbar() {
           <IconButton
             aria-label={"Toggle Color Mode"}
             icon={
-              colorMode == "light" ? (
+              colorMode === "light" ? (
                 <IoSunnyOutline className="text-xl" />
               ) : (
                 <IoMoonOutline className="text-xl" />

@@ -7,7 +7,6 @@ import {
   Flex,
   FormLabel,
   Heading,
-  LightMode,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,

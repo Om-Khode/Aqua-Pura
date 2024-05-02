@@ -6,8 +6,6 @@ import {
   Heading,
   Image,
   Stack,
-  Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { PasswordField } from "../components/login/PasswordField";
 import Logo from "../assets/images/common/Logo4.png";
@@ -17,7 +15,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 import styles from "../styles/logo.module.css";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ResetPassword() {
   const { p1 } = useParams();
@@ -91,8 +89,6 @@ export default function ResetPassword() {
       toast.error(error.response.data.msg);
     }
   };
-
-  const color = useColorModeValue("gray.600", "gray.300");
 
   return (
     <Container
