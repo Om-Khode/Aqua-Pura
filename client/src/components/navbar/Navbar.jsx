@@ -13,21 +13,27 @@ import {
   useDisclosure,
   PopoverTrigger,
   useColorModeValue,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { IoSunnyOutline } from "react-icons/io5";
+import { IoMoonOutline } from "react-icons/io5";
 
-import logo from "../../assets/images/common/Logo2.png";
+import logoLight from "../../assets/images/common/Logo2.png";
+import logoDark from "../../assets/images/common/Logo5.png";
 import { useState } from "react";
 import { logout } from "../../redux/userSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleLogout = async () => {
     setLoading(true);
@@ -41,6 +47,7 @@ export default function Navbar() {
       if (res.data.success) {
         toast.success(res.data.msg);
         dispatch(logout());
+        navigate("/");
       } else {
         toast.error(res.data.msg);
       }
@@ -49,6 +56,8 @@ export default function Navbar() {
     }
     setLoading(false);
   };
+
+  const logo = useColorModeValue(logoLight, logoDark);
 
   return (
     <Box position={"fixed"} w={"100vw"} zIndex={999}>
@@ -60,7 +69,7 @@ export default function Navbar() {
         px={{ base: 4 }}
         borderBottom={1}
         borderStyle={"solid"}
-        borderColor={useColorModeValue("gray.200", "gray.900")}
+        borderColor={useColorModeValue("gray.200", "gray.700")}
         align={"center"}
       >
         <Flex
@@ -97,7 +106,7 @@ export default function Navbar() {
             />
           </Link>
 
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <Flex
               align={"center"}
               display={{ base: "none", md: "flex" }}
@@ -105,8 +114,6 @@ export default function Navbar() {
             >
               <DesktopNav />
             </Flex>
-          ) : (
-            ""
           )}
         </Flex>
 
@@ -116,6 +123,17 @@ export default function Navbar() {
           direction={"row"}
           spacing={6}
         >
+          <IconButton
+            aria-label={"Toggle Color Mode"}
+            icon={
+              colorMode == "light" ? (
+                <IoSunnyOutline className="text-xl" />
+              ) : (
+                <IoMoonOutline className="text-xl" />
+              )
+            }
+            onClick={toggleColorMode}
+          />
           {!isLoggedIn ? (
             <>
               <Link to="/login" className="flex justify-center items-center">
@@ -154,12 +172,10 @@ export default function Navbar() {
         </Stack>
       </Flex>
 
-      {isLoggedIn ? (
+      {isLoggedIn && (
         <Collapse in={isOpen} animateOpacity color={"red"}>
           <MobileNav />
         </Collapse>
-      ) : (
-        ""
       )}
     </Box>
   );

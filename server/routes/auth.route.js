@@ -7,6 +7,9 @@ const {
   loginUser,
   getUserDetails,
   logoutUser,
+  verifyUser,
+  resetPassword,
+  forgotPassword,
 } = require("../controllers/auth.controller");
 
 // Route 1: Create user / SignUp
@@ -33,5 +36,14 @@ router.get("/logout", logoutUser);
 
 // Route 4: Get User Details
 router.get("/getuser", fetchuser, getUserDetails);
+
+// Route 5: Verify User
+router.post("/verify", verifyUser);
+
+// Route 6: Forgot Password
+router.post("/forgotPassword", forgotPassword);
+
+// Route 7: Reset Password
+router.post("/resetPassword", resetPassword);
 
 module.exports = router;

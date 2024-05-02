@@ -8,6 +8,7 @@ import {
   Box,
   GridItem,
   Grid,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import PhSlider from "./PhSlider";
 
@@ -22,6 +23,8 @@ const InputField = ({
   ...props
 }) => {
   const format = (val) => (selected ? val + " " + selected : val);
+  const bgColor = useColorModeValue("blue.500", "blue.600");
+
   return (
     <GridItem>
       <Box
@@ -52,7 +55,7 @@ const InputField = ({
           {!info && options && (
             <Select
               w={"38%"}
-              bg={"blue.500"}
+              bg={bgColor}
               color={"white"}
               variant={"filled"}
               defaultValue={selected}

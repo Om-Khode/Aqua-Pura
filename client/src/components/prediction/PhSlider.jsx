@@ -9,11 +9,13 @@ import {
   SliderThumb,
   SliderTrack,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 export default function PhSlider({ form, setForm, info }) {
   const [showTooltip, setShowTooltip] = useState(false);
+  const bgColor = useColorModeValue("blue.500", "blue.600");
 
   return (
     <GridItem>
@@ -57,7 +59,7 @@ export default function PhSlider({ form, setForm, info }) {
               <p className="text-xs font-bold">10.5</p>
             </SliderMark>
             <SliderTrack>
-              <SliderFilledTrack />
+              <SliderFilledTrack bg={bgColor} />
             </SliderTrack>
             <Tooltip
               hasArrow

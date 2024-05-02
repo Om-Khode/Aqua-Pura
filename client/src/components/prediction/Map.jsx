@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "../../styles/map.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/dist/geosearch.css";
+import { LightMode } from "@chakra-ui/react";
 
 function LeafletgeoSearch({ position, setPosition }) {
   const handleMarkerDrag = (e) => {
@@ -51,27 +53,29 @@ export default function Map({ position, setPosition }) {
   };
 
   return (
-    <div id="mapid">
-      <MapContainer
-        center={position}
-        zoom={13}
-        onClick={(e) => handleMapClick(e)}
-        style={{ height: "400px", width: "100%" }}
-        className="rounded-lg shadow-md z-0 mt-6"
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <LeafletgeoSearch position={position} setPosition={setPosition} />
-        <Marker
-          position={position}
-          draggable={true}
-          icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
-          eventHandlers={{
-            mouseup: (e) => {
-              handleMarkerDrag(e);
-            },
-          }}
-        ></Marker>
-      </MapContainer>
-    </div>
+    <LightMode>
+      <div id="mapid">
+        <MapContainer
+          center={position}
+          zoom={13}
+          onClick={(e) => handleMapClick(e)}
+          style={{ height: "400px", width: "100%", bg: "white" }}
+          className="rounded-lg shadow-md z-0 mt-6"
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <LeafletgeoSearch position={position} setPosition={setPosition} />
+          <Marker
+            position={position}
+            draggable={true}
+            icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
+            eventHandlers={{
+              mouseup: (e) => {
+                handleMarkerDrag(e);
+              },
+            }}
+          ></Marker>
+        </MapContainer>
+      </div>
+    </LightMode>
   );
 }

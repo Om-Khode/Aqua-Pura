@@ -9,19 +9,18 @@ import {
   Heading,
   Image,
   Input,
-  Link,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { PasswordField } from "../components/login/PasswordField";
-import Logo from "../assets/images/common/Logo3.png";
-import { useState } from "react";
+import Logo from "../assets/images/common/Logo4.png";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../styles/logo.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login } from "../redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function SignUp() {
   const [form, setForm] = useState({
@@ -63,8 +62,18 @@ export default function SignUp() {
     }
   };
 
+  const color = useColorModeValue("gray.600", "gray.300");
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [user.isLoggedIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,8 +96,7 @@ export default function SignUp() {
       );
       if (res.data.success) {
         toast.success(res.data.msg);
-        dispatch(login(res.data.user));
-        navigate("/");
+        navigate("/email");
       } else {
         toast.error(res.data.msg);
       }
@@ -111,9 +119,9 @@ export default function SignUp() {
           </Center>
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
             <Heading size={{ base: "lg" }}>Create an account</Heading>
-            <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
+            <Text color={color} fontSize={{ base: "sm", md: "md" }}>
               Already have an account?{" "}
-              <Link href="login" color="blue.500">
+              <Link to="/login" className="text-blue-500 hover:underline">
                 Login
               </Link>
             </Text>

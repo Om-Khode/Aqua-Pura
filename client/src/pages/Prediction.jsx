@@ -7,6 +7,7 @@ import {
   Flex,
   FormLabel,
   Heading,
+  LightMode,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -18,8 +19,9 @@ import ChemicalInputFields from "../components/prediction/ChemicalInputFields";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getInfo } from "../utils/fetchInfo";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/loader/Loader";
+import { useSelector } from "react-redux";
 
 export default function Prediction() {
   const [showMap, setShowMap] = useState(true);
@@ -27,6 +29,8 @@ export default function Prediction() {
   const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 });
 
   const [fetched, setFetched] = useState(false);
+
+  const [result, setResult] = useState(null);
 
   const location = useLocation();
 
@@ -49,6 +53,17 @@ export default function Prediction() {
       toast.error(res.msg);
     }
   };
+
+  const user = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.isLoggedIn === false) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [user.isLoggedIn]);
 
   useEffect(() => {
     fetchInfo();
@@ -102,6 +117,13 @@ export default function Prediction() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setForm({
+      ...form,
+      longitude: { value: parseFloat(form.longitude.value) },
+      latitude: { value: parseFloat(form.latitude.value) },
+    });
+
     try {
       const res = await axios.post(
         process.env.REACT_APP_URL + "/api/predictions/addprediction",
@@ -112,6 +134,8 @@ export default function Prediction() {
       );
       console.log(res);
       if (res.data.success) {
+        console.log(res.data.data);
+        setResult(res.data.data.prediction);
         toast.success(res.data.msg);
       } else {
         toast.error(res.data.msg);
@@ -234,7 +258,6 @@ export default function Prediction() {
                             </Flex>
                           </Box>
                         </Flex>
-
                         <Button
                           onClick={() => {
                             setShowMap(!showMap);
@@ -250,7 +273,26 @@ export default function Prediction() {
                   <Stack>
                     <ChemicalInputFields form={form} setForm={setForm} />
                   </Stack>
-                  <Stack spacing="6">
+                  <Stack mt={6} w={"fit-content"} mx={"auto"}>
+                    {result && (
+                      <Box
+                        bg={"bg.surface"}
+                        border={"1px solid"}
+                        borderColor={"gray.300"}
+                        px={{ base: "6", md: "6" }}
+                        py={{ base: "3", md: "3" }}
+                        borderRadius={{ base: "lg", md: "xl" }}
+                      >
+                        <Flex justify={"center"} align={"flex-end"}>
+                          <FormLabel htmlFor="prediction" w={"5rem"}>
+                            Prediction:
+                          </FormLabel>
+                          <NumberInput precision={2} isReadOnly value={result}>
+                            <NumberInputField />
+                          </NumberInput>
+                        </Flex>
+                      </Box>
+                    )}
                     <Button
                       bg="blue.500"
                       color="white"
@@ -259,7 +301,7 @@ export default function Prediction() {
                       w={80}
                       mx={"auto"}
                     >
-                      Submit
+                      {!result ? "Submit" : "Revalidate"}
                     </Button>
                   </Stack>
                 </form>

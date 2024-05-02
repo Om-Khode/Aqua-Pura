@@ -9,6 +9,7 @@ import {
   Container,
   Button,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import dayjs from "dayjs";
 import { Icon } from "@chakra-ui/react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
+import { FaRegEdit } from "react-icons/fa";
 import {
   Modal,
   ModalOverlay,
@@ -26,6 +28,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function History() {
   const navigate = useNavigate();
@@ -33,6 +36,15 @@ export default function History() {
   const [predictions, setPredictions] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [toDeleleteId, setToDeleleteId] = useState("");
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user.isLoggedIn === false) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [user.isLoggedIn]);
 
   const fetchData = async () => {
     try {
@@ -58,8 +70,8 @@ export default function History() {
     // eslint-disable-next-line
   }, []);
 
-  const handleInfoClick = (id) => {
-    navigate("/history/" + id);
+  const handleClick = (name, id) => {
+    navigate(name + id);
   };
 
   const handleDeleteClick = (id) => {
@@ -125,17 +137,31 @@ export default function History() {
                   <Td>{dayjs(prediction.date).format("DD/MM/YYYY")}</Td>
                   <Td isNumeric>
                     <Button
-                      marginRight={2}
+                      marginRight={3}
                       bg={"gray.300"}
-                      size={"sm"}
-                      onClick={() => handleInfoClick(prediction._id)}
+                      size={{ base: "sm", md: "md" }}
+                      onClick={() => handleClick("/history/", prediction._id)}
+                      title="View Prediction"
                     >
-                      <Icon as={FaCircleInfo} />
+                      <Icon as={FaCircleInfo} color={"black"} />
+                    </Button>
+                    <Button
+                      marginRight={3}
+                      bg={"blue.500"}
+                      size={{ base: "sm", md: "md" }}
+                      colorScheme="blue"
+                      onClick={() =>
+                        handleClick("/prediction/", prediction._id)
+                      }
+                      title="Retrieve Prediction"
+                    >
+                      <Icon as={FaRegEdit} />
                     </Button>
                     <Button
                       colorScheme="red"
-                      size={"sm"}
+                      size={{ base: "sm", md: "md" }}
                       onClick={() => handleDeleteClick(prediction._id)}
+                      title="Delete Prediction"
                     >
                       <Icon as={FaRegTrashAlt} />
                     </Button>

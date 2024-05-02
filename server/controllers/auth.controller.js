@@ -3,6 +3,9 @@ const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const Otp = require("../models/otp.model");
+const sendVerficationMail = require("../utils/sendEmail");
+const { createConformationUrl } = require("../utils/createConformationUrl");
 
 const JWT_SECRET = process.env.SECRET;
 
@@ -34,37 +37,71 @@ const createUser = async (req, res) => {
       password: secPass,
     });
 
-    const data = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    // Create authtoken
-    const authtoken = jwt.sign(data, JWT_SECRET);
-
-    res.cookie("jwt", authtoken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24, // 24 hours in seconds
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
-    });
-
-    const response = {
-      success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-      },
-      msg: "You have signed up successfully!",
-    };
-
-    // Send the authtoken as a response
-    res.status(200).json(response);
+    return await sendVerficationMail(
+      user.email,
+      await createConformationUrl(user._id, true),
+      res,
+      true
+    );
   } catch (error) {
     // If some error occurs, display the errors
     console.log(error.message);
     res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+};
+
+const verifyUser = async (req, res) => {
+  try {
+    let { p1: user, p2: token } = req.body;
+
+    const data = jwt.verify(user, JWT_SECRET);
+
+    const userId = data.userId;
+
+    const otpToVerify = await Otp.find({ userId });
+    if (otpToVerify.length > 0) {
+      const { expiresAt } = otpToVerify[0];
+      const otpCode = otpToVerify[0].code;
+
+      if (Date.parse(expiresAt) < Date.now()) {
+        console.log("I am expired");
+        try {
+          await Otp.findOneAndDelete({ userId: userId });
+          await User.findByIdAndDelete({ id: userId });
+          return res.status(400).send({
+            success: false,
+            msg: "Link has been expired. Try to signing up again!",
+          });
+        } catch (error) {
+          return res.status(400).send({
+            success: false,
+            msg: "Error deleting the records!",
+          });
+        }
+      } else {
+        const result = token === otpCode;
+
+        if (result) {
+          await User.findByIdAndUpdate({ _id: userId }, { verified: true });
+          await Otp.findOneAndDelete({ userId: userId });
+
+          return res.status(200).send({
+            success: true,
+            msg: "Your account has been verified. You can login now!",
+          });
+        }
+      }
+    } else {
+      return res.status(400).send({
+        success: false,
+        msg: "Account record doesn't exist or has already been verified. Please sign up or log in.",
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      msg: "Account record doesn't exist or has already been verified. Please sign up or log in.",
+    });
   }
 };
 
@@ -80,13 +117,13 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, msg: "Enter correct credentials" });
+        .json({ success: false, msg: "Invalid credentials" });
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
       return res
         .status(400)
-        .json({ success: false, msg: "Enter correct credentials" });
+        .json({ success: false, msg: "Invalid credentials" });
     }
 
     const data = {
@@ -95,7 +132,7 @@ const loginUser = async (req, res) => {
       },
     };
 
-    const authtoken = jwt.sign(data, JWT_SECRET);
+    const authtoken = jwt.sign(data, JWT_SECRET, { expiresIn: "24h" });
 
     res.cookie("jwt", authtoken, {
       httpOnly: true,
@@ -114,6 +151,66 @@ const loginUser = async (req, res) => {
     };
 
     res.status(200).json(response);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, msg: errors.array() });
+  }
+  try {
+    // Check whether the user with the email exists already
+    let user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "Account with this email doesn't exist!",
+      });
+    }
+
+    return await sendVerficationMail(
+      user.email,
+      await createConformationUrl(user._id, false),
+      res,
+      false
+    );
+  } catch (error) {
+    // If some error occurs, display the errors
+    console.log(error.message);
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { userToken, newPassword } = req.body;
+  const data = jwt.verify(userToken, JWT_SECRET);
+  const userId = data.userId;
+
+  console.log(userId, newPassword);
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "Reset password link has been expired! Please try again!",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const secPass = await bcrypt.hash(newPassword, salt);
+
+    await User.findByIdAndUpdate({ _id: userId }, { password: secPass });
+
+    return res.status(200).json({
+      success: true,
+      msg: "Password has been reset successfully!",
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ success: false, msg: "Internal server error" });
@@ -159,7 +256,10 @@ const getUserDetails = async (req, res) => {
 
 module.exports = {
   createUser,
+  verifyUser,
   loginUser,
+  forgotPassword,
+  resetPassword,
   logoutUser,
   getUserDetails,
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/userSlice";
+import { login, logout } from "../redux/userSlice";
 
 export default function FetchUserData() {
   const dispatch = useDispatch();
@@ -16,6 +16,8 @@ export default function FetchUserData() {
       );
       if (res.data.success) {
         dispatch(login(res.data.user));
+      } else {
+        dispatch(logout());
       }
     } catch (error) {}
   };

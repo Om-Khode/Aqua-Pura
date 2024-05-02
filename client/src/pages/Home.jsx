@@ -4,7 +4,6 @@ import { Fade } from "react-awesome-reveal";
 import well1 from "../assets/images/home/well1.jpg";
 import well2 from "../assets/images/home/well2.jpg";
 import well3 from "../assets/images/home/well3.jpg";
-import Loader from "../components/loader/Loader";
 
 export default function Home() {
   return (

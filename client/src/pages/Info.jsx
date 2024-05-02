@@ -7,24 +7,23 @@ import {
   Flex,
   FormLabel,
   Heading,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
   Stack,
 } from "@chakra-ui/react";
 import ChemicalInputFields from "../components/prediction/ChemicalInputFields";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getInfo } from "../utils/fetchInfo";
 import Loader from "../components/loader/Loader";
+import { useSelector } from "react-redux";
 
 export default function Info() {
   const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 });
 
   const [fetched, setFetched] = useState(false);
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     longitude: { value: 0 },
@@ -51,6 +50,15 @@ export default function Info() {
 
   const location = useLocation();
 
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user.isLoggedIn === false) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [user.isLoggedIn]);
+
   const fetchInfo = async () => {
     const id = location.pathname.split("/")[2];
     if (!id) return;
@@ -71,8 +79,6 @@ export default function Info() {
     fetchInfo();
     // eslint-disable-next-line
   }, []);
-
-  const navigate = useNavigate();
 
   const handleClick = async () => {
     const id = location.pathname.split("/")[2];

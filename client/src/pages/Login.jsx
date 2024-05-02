@@ -11,20 +11,20 @@ import {
   HStack,
   Image,
   Input,
-  Link,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { PasswordField } from "../components/login/PasswordField";
-import Logo from "../assets/images/common/Logo3.png";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import Logo from "../assets/images/common/Logo4.png";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/userSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
 
 import styles from "../styles/logo.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -37,7 +37,17 @@ export default function Login() {
     passwordError: false,
   });
 
-  // const user = useSelector((state) => state.user);
+  const color = useColorModeValue("gray.600", "gray.300");
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [user.isLoggedIn]);
+
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -78,6 +88,7 @@ export default function Login() {
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.msg);
     }
   };
 
@@ -95,9 +106,9 @@ export default function Login() {
           </Center>
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
             <Heading size={{ base: "lg" }}>Log in to your account</Heading>
-            <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
+            <Text color={color} fontSize={{ base: "sm", md: "md" }}>
               Don't have an account?{" "}
-              <Link href="signup" color="blue.500">
+              <Link to="/signup" className="text-blue-500 hover:underline">
                 Sign up
               </Link>
             </Text>
@@ -138,9 +149,12 @@ export default function Login() {
               </Stack>
               <HStack justify="space-between" className="my-3">
                 <Checkbox defaultChecked>Remember me</Checkbox>
-                <Button variant="text" size="sm" color="blue.500">
+                <Link
+                  to="/forgotPassword"
+                  className="text-sm my-2 text-blue-500 hover:underline"
+                >
                   Forgot password?
-                </Button>
+                </Link>
               </HStack>
               <Stack spacing="6">
                 <Button bg="blue.500" color="white" type="submit">

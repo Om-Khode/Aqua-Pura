@@ -14,10 +14,14 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  date: {
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
