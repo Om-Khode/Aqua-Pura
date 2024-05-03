@@ -14,7 +14,7 @@
   ],
   "crons": [
     {
-      "path": "/api/deleteUsers",
+      "path": "/api/deleteUserAfterDelay",
       "schedule": "* * * * *"
     }
   ]
