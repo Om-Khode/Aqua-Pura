@@ -45,7 +45,6 @@ export default function Navbar() {
           url: process.env.REACT_APP_URL,
         }
       );
-      console.log(res);
       if (res.data.success) {
         toast.success(res.data.msg);
         dispatch(logout());

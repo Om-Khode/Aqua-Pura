@@ -119,7 +119,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={mUnits}
         selected={form.ec.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, ec: { value: form.ec.value, unit: e } });
         }}
         info={info}
@@ -137,7 +136,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.ec.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, co3: { value: form.co3.value, unit: e } });
         }}
         info={info}
@@ -155,7 +153,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.hco3.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, hco3: { value: form.hco3.value, unit: e } });
         }}
         info={info}
@@ -170,7 +167,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.cl.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, cl: { value: form.cl.value, unit: e } });
         }}
         info={info}
@@ -188,7 +184,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.so4.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, so4: { value: form.so4.value, unit: e } });
         }}
         info={info}
@@ -206,7 +201,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.no3.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, no3: { value: form.no3.value, unit: e } });
         }}
         info={info}
@@ -224,7 +218,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.po4.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, po4: { value: form.po4.value, unit: e } });
         }}
         info={info}
@@ -239,7 +232,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.th.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, th: { value: form.th.value, unit: e } });
         }}
         info={info}
@@ -254,7 +246,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.ca.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, ca: { value: form.ca.value, unit: e } });
         }}
         info={info}
@@ -269,7 +260,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.mg.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, mg: { value: form.mg.value, unit: e } });
         }}
         info={info}
@@ -284,7 +274,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.na.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, na: { value: form.na.value, unit: e } });
         }}
         info={info}
@@ -299,7 +288,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.k.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, k: { value: form.k.value, unit: e } });
         }}
         info={info}
@@ -314,7 +302,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.f.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, f: { value: form.f.value, unit: e } });
         }}
         info={info}
@@ -332,7 +319,6 @@ const ChemicalInputFields = ({ form, setForm, info = false }) => {
         options={lUnits}
         selected={form.sio2.unit}
         onSelect={(e) => {
-          console.log(e);
           setForm({ ...form, sio2: { value: form.sio2.value, unit: e } });
         }}
         info={info}

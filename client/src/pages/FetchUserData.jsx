@@ -15,7 +15,6 @@ export default function FetchUserData() {
           url: process.env.REACT_APP_URL,
         }
       );
-      console.log(res);
 
       if (res.data.success) {
         dispatch(login(res.data.user));

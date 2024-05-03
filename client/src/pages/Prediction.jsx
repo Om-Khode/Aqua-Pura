@@ -135,9 +135,7 @@ export default function Prediction() {
           url: process.env.REACT_APP_URL,
         }
       );
-      console.log(res);
       if (res.data.success) {
-        console.log(res.data.data);
         setResult(res.data.data.prediction);
         toast.success(res.data.msg);
       } else {

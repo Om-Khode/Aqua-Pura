@@ -28,6 +28,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function History() {
   const navigate = useNavigate();
@@ -54,11 +55,10 @@ export default function History() {
           url: process.env.REACT_APP_URL,
         }
       );
-      console.log(res.data);
       if (res.data.success) {
         setPredictions(res.data.data);
       } else {
-        console.log(res.data.msg);
+        toast.error(res.data.msg);
       }
     } catch (error) {
       console.log(error);
@@ -75,10 +75,8 @@ export default function History() {
   };
 
   const handleDeleteClick = (id) => {
-    console.log("Delete Clicked");
     onOpen();
     setToDeleleteId(id);
-    console.log(id);
   };
 
   const [loading, setLoading] = useState(false);
@@ -101,7 +99,7 @@ export default function History() {
           predictions.filter((prediction) => prediction._id !== toDeleleteId)
         );
       } else {
-        console.log(res.data.msg);
+        toast.error(res.data.msg);
       }
     } catch (error) {
       console.log(error);
@@ -176,6 +174,9 @@ export default function History() {
               ))}
           </Tbody>
         </Table>
+        {predictions.length === 0 && (
+          <p className="text-center mt-5 w-[100%]">No predictions found!</p>
+        )}
       </TableContainer>
 
       <Modal isOpen={isOpen} onClose={onClose}>
