@@ -40,6 +40,8 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
-cron.schedule("*/60 * * * *", deleteUserAfterDelay, {
-  scheduled: true,
-});
+// Not working on Vercel
+
+// cron.schedule("*/60 * * * *", deleteUserAfterDelay, {
+//   scheduled: true,
+// });
