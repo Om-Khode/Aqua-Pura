@@ -64,9 +64,13 @@ export default function ResetPassword() {
     // eslint-disable-next-line
   }, [user.isLoggedIn]);
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (error.newPassword || error.confirmNewPassword) {
+      setLoading(false);
       return;
     }
 
@@ -89,6 +93,7 @@ export default function ResetPassword() {
       console.log(error);
       toast.error(error.response.data.msg);
     }
+    setLoading(false);
   };
 
   return (
@@ -135,7 +140,12 @@ export default function ResetPassword() {
                 />
               </Stack>
               <Stack spacing="6" mt={6}>
-                <Button bg="blue.500" color="white" type="submit">
+                <Button
+                  isLoading={loading}
+                  bg="blue.500"
+                  color="white"
+                  type="submit"
+                >
                   Reset Password
                 </Button>
               </Stack>

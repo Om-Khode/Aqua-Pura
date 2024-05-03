@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
+import React, { useEffect, useMemo, useRef } from "react";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -56,6 +50,8 @@ function DraggableMarker({ position, setPosition }) {
         }
       },
     }),
+
+    // eslint-disable-next-line
     []
   );
 
@@ -76,10 +72,6 @@ export default function Map({ position, setPosition }) {
     setPosition([lat, lng]);
   };
 
-  const handleMarkerDrag = (e) => {
-    setPosition(e.latlng);
-  };
-
   return (
     <LightMode>
       <div id="mapid">
@@ -92,17 +84,7 @@ export default function Map({ position, setPosition }) {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <LeafletgeoSearch position={position} setPosition={setPosition} />
-          <DraggableMarker position={position} setPosition={setPosition} />
-          {/* <Marker
-            position={position}
-            draggable={true}
-            icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
-            eventHandlers={{
-              mouseup: (e) => {
-                handleMarkerDrag(e);
-              },
-            }}
-          ></Marker> */}
+          <DraggableMarker position={position} setPosition={setPosition} />d
         </MapContainer>
       </div>
     </LightMode>

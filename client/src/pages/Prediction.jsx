@@ -115,11 +115,11 @@ export default function Prediction() {
 
   const format = (val) => val + "°";
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("form", form);
-
+    setLoading(true);
     setForm({
       ...form,
       longitude: { value: parseFloat(form.longitude.value) },
@@ -145,7 +145,9 @@ export default function Prediction() {
       }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
@@ -315,6 +317,7 @@ export default function Prediction() {
                       mt={12}
                       w={80}
                       mx={"auto"}
+                      isLoading={loading}
                     >
                       {!result ? "Submit" : "Revalidate"}
                     </Button>

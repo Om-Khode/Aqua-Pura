@@ -75,14 +75,18 @@ export default function SignUp() {
     // eslint-disable-next-line
   }, [user.isLoggedIn]);
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (
       error.nameError ||
       error.emailError ||
       error.passwordError ||
       error.confirmPasswordError
     ) {
+      setLoading(false);
       return;
     }
 
@@ -104,6 +108,7 @@ export default function SignUp() {
     } catch (error) {
       toast.error(error.response.data.msg);
     }
+    setLoading(false);
   };
 
   return (
@@ -183,7 +188,12 @@ export default function SignUp() {
                 />
               </Stack>
               <Stack mt={5} spacing="6">
-                <Button bg="blue.500" color="white" type="submit">
+                <Button
+                  isLoading={loading}
+                  bg="blue.500"
+                  color="white"
+                  type="submit"
+                >
                   Sign in
                 </Button>
               </Stack>

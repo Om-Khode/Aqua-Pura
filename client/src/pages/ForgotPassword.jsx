@@ -31,6 +31,8 @@ export default function ForgotPassword() {
     emailError: false,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
@@ -53,7 +55,9 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (error.emailError) {
+      setLoading(false);
       return;
     }
 
@@ -76,6 +80,7 @@ export default function ForgotPassword() {
       console.log(error);
       toast.error(error.response.data.msg);
     }
+    setLoading(false);
   };
 
   const color = useColorModeValue("gray.600", "gray.300");
@@ -128,7 +133,12 @@ export default function ForgotPassword() {
                 </FormControl>
               </Stack>
               <Stack spacing="6" mt={6}>
-                <Button bg="blue.500" color="white" type="submit">
+                <Button
+                  isLoading={loading}
+                  bg="blue.500"
+                  color="white"
+                  type="submit"
+                >
                   Submit
                 </Button>
               </Stack>

@@ -124,7 +124,7 @@ export default function Navbar() {
           justify={"flex-end"}
           align={"center"}
           direction={"row"}
-          spacing={6}
+          spacing={{ base: 3, md: 6 }}
         >
           <IconButton
             aria-label={"Toggle Color Mode"}
@@ -178,7 +178,7 @@ export default function Navbar() {
 
       {isLoggedIn && (
         <Collapse in={isOpen} animateOpacity color={"red"}>
-          <MobileNav />
+          <MobileNav onToggle={onToggle} />
         </Collapse>
       )}
     </Box>
@@ -216,7 +216,7 @@ const DesktopNav = () => {
   );
 };
 
-const MobileNav = () => {
+const MobileNav = ({ onToggle }) => {
   return (
     <Stack
       bg={useColorModeValue("white", "gray.800")}
@@ -224,14 +224,14 @@ const MobileNav = () => {
       display={{ md: "none" }}
     >
       {NAV_ITEMS.map((navItem) => (
-        <MobileNavItem key={navItem.label} {...navItem} />
+        <MobileNavItem key={navItem.label} onToggle={onToggle} {...navItem} />
       ))}
     </Stack>
   );
 };
 
-const MobileNavItem = ({ label, children, to }) => {
-  const { isOpen, onToggle } = useDisclosure();
+const MobileNavItem = ({ onToggle, label, children, to }) => {
+  const { isOpen } = useDisclosure();
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
@@ -244,6 +244,7 @@ const MobileNavItem = ({ label, children, to }) => {
         _hover={{
           textDecoration: "none",
         }}
+        onClick={onToggle}
       >
         <Text
           fontWeight={600}

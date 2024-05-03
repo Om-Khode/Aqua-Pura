@@ -9,6 +9,8 @@ import {
   GridItem,
   Grid,
   useColorModeValue,
+  LightMode,
+  useColorMode,
 } from "@chakra-ui/react";
 import PhSlider from "./PhSlider";
 
@@ -24,6 +26,7 @@ const InputField = ({
 }) => {
   const format = (val) => (selected ? val + " " + selected : val);
   const bgColor = useColorModeValue("blue.500", "blue.600");
+  const { colorMode } = useColorMode();
 
   return (
     <GridItem>
@@ -65,7 +68,11 @@ const InputField = ({
               onChange={(e) => onSelect(e.target.value)}
             >
               {options.map((option) => (
-                <option key={option} value={option} className="text-black">
+                <option
+                  key={option}
+                  value={option}
+                  className={colorMode === "light" ? "text-black" : ""}
+                >
                   {option}
                 </option>
               ))}

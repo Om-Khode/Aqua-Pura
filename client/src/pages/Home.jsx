@@ -17,7 +17,7 @@ export default function Home() {
         paddingTop={{ base: 20, md: 24 }}
         mb={10}
       >
-        <Fade fraction={0.7} triggerOnce={true}>
+        <Fade fraction={0.5} triggerOnce={true}>
           <Image
             src={well1}
             h={{ base: "18rem", md: "24rem" }}

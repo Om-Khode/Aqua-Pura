@@ -81,7 +81,10 @@ export default function History() {
     console.log(id);
   };
 
+  const [loading, setLoading] = useState(false);
+
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const res = await axios.delete(
         process.env.REACT_APP_URL + "/api/predictions/deleteprediction",
@@ -103,6 +106,7 @@ export default function History() {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
     onClose();
   };
 
@@ -122,7 +126,7 @@ export default function History() {
               </Th>
               <Th>Langitude</Th>
               <Th>Longitude</Th>
-              <Th>pH</Th>
+              <Th>Prediction</Th>
               <Th>Date</Th>
               <Th isNumeric>Action</Th>
             </Tr>
@@ -134,7 +138,7 @@ export default function History() {
                   <Td>{index + 1}.</Td>
                   <Td>{prediction.longitude.value}</Td>
                   <Td>{prediction.latitude.value}</Td>
-                  <Td>{prediction.ph.value}</Td>
+                  <Td>{prediction.prediction}</Td>
                   <Td>{dayjs(prediction.date).format("DD/MM/YYYY")}</Td>
                   <Td isNumeric>
                     <Button
@@ -143,6 +147,7 @@ export default function History() {
                       size={{ base: "sm", md: "md" }}
                       onClick={() => handleClick("/history/", prediction._id)}
                       title="View Prediction"
+                      _hover={{ bg: "gray.400" }}
                     >
                       <Icon as={FaCircleInfo} color={"black"} />
                     </Button>
@@ -186,7 +191,12 @@ export default function History() {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="solid" colorScheme="red" onClick={handleDelete}>
+            <Button
+              isLoading={loading}
+              variant="solid"
+              colorScheme="red"
+              onClick={handleDelete}
+            >
               Delete
             </Button>
           </ModalFooter>

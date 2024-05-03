@@ -65,9 +65,13 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (error.emailError || error.passwordError) {
+      setLoading(false);
       return;
     }
 
@@ -91,6 +95,7 @@ export default function Login() {
       console.log(error);
       toast.error(error.response.data.msg);
     }
+    setLoading(false);
   };
 
   return (
@@ -158,7 +163,12 @@ export default function Login() {
                 </Link>
               </HStack>
               <Stack spacing="6">
-                <Button bg="blue.500" color="white" type="submit">
+                <Button
+                  isLoading={loading}
+                  bg="blue.500"
+                  color="white"
+                  type="submit"
+                >
                   Login
                 </Button>
               </Stack>
