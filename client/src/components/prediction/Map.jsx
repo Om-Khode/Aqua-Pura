@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -21,10 +27,7 @@ function LeafletgeoSearch({ position, setPosition }) {
       provider: new OpenStreetMapProvider(),
       style: "bar",
       showPopup: false,
-      marker: {
-        icon: new L.Icon({ iconUrl: icon, shadowUrl: iconShadow }),
-        draggable: true,
-      },
+      showMarker: false,
     });
 
     map.on("geosearch/showlocation", (e) => {
@@ -40,6 +43,31 @@ function LeafletgeoSearch({ position, setPosition }) {
   }, []);
 
   return null;
+}
+
+function DraggableMarker({ position, setPosition }) {
+  const markerRef = useRef(null);
+  const eventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current;
+        if (marker != null) {
+          setPosition(marker.getLatLng());
+        }
+      },
+    }),
+    []
+  );
+
+  return (
+    <Marker
+      draggable={true}
+      eventHandlers={eventHandlers}
+      position={position}
+      icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
+      ref={markerRef}
+    ></Marker>
+  );
 }
 
 export default function Map({ position, setPosition }) {
@@ -64,7 +92,8 @@ export default function Map({ position, setPosition }) {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <LeafletgeoSearch position={position} setPosition={setPosition} />
-          <Marker
+          <DraggableMarker position={position} setPosition={setPosition} />
+          {/* <Marker
             position={position}
             draggable={true}
             icon={new L.Icon({ iconUrl: icon, shadowUrl: iconShadow })}
@@ -73,7 +102,7 @@ export default function Map({ position, setPosition }) {
                 handleMarkerDrag(e);
               },
             }}
-          ></Marker>
+          ></Marker> */}
         </MapContainer>
       </div>
     </LightMode>

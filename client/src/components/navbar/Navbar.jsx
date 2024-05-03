@@ -45,7 +45,7 @@ export default function Navbar() {
           url: process.env.REACT_APP_URL,
         }
       );
-      console.log(res)
+      console.log(res);
       if (res.data.success) {
         toast.success(res.data.msg);
         dispatch(logout());
@@ -122,16 +122,18 @@ export default function Navbar() {
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={"flex-end"}
+          align={"center"}
           direction={"row"}
           spacing={6}
         >
           <IconButton
             aria-label={"Toggle Color Mode"}
+            size={{ base: "sm", md: "md" }}
             icon={
               colorMode === "light" ? (
-                <IoSunnyOutline className="text-xl" />
+                <IoSunnyOutline className="text-md md:text-xl" />
               ) : (
-                <IoMoonOutline className="text-xl" />
+                <IoMoonOutline className="text-md md:text-xl" />
               )
             }
             onClick={toggleColorMode}
@@ -162,7 +164,7 @@ export default function Navbar() {
           ) : (
             <Button
               isLoading={loading}
-              fontSize={"sm"}
+              size={{ base: "sm", md: "md" }}
               fontWeight={600}
               colorScheme="red"
               variant={"solid"}

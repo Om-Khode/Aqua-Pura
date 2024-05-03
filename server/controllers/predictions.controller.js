@@ -62,80 +62,76 @@ const addPredictions = async (req, res) => {
       sio2: parseFloat(sio2.value),
     };
 
-    console.log(data);
-
     const predictionResult = await axios.post(
       process.env.ML_API + "/predict",
       data
     );
 
-    console.log(predictionResult.data.prediction);
-
     const prediction = new Predictions({
       user: req.user.id,
       longitude: {
-        value: parseFloat(longitude),
+        value: parseFloat(longitude.value),
       },
       latitude: {
-        value: parseFloat(latitude),
+        value: parseFloat(latitude.value),
       },
       ph: {
-        value: parseFloat(ph),
+        value: parseFloat(ph.value),
       },
       ec: {
-        value: parseFloat(ec),
+        value: parseFloat(ec.value),
         unit: ec.unit,
       },
       co3: {
-        value: parseFloat(co3),
+        value: parseFloat(co3.value),
         unit: co3.unit,
       },
       hco3: {
-        value: parseFloat(hco3),
+        value: parseFloat(hco3.value),
         unit: hco3.unit,
       },
       cl: {
-        value: parseFloat(cl),
+        value: parseFloat(cl.value),
         unit: cl.unit,
       },
       so4: {
-        value: parseFloat(so4),
+        value: parseFloat(so4.value),
         unit: so4.unit,
       },
       no3: {
-        value: parseFloat(no3),
+        value: parseFloat(no3.value),
         unit: no3.unit,
       },
       po4: {
-        value: parseFloat(po4),
+        value: parseFloat(po4.value),
         unit: po4.unit,
       },
       th: {
-        value: parseFloat(th),
+        value: parseFloat(th.value),
         unit: th.unit,
       },
       ca: {
-        value: parseFloat(ca),
+        value: parseFloat(ca.value),
         unit: ca.unit,
       },
       mg: {
-        value: parseFloat(mg),
+        value: parseFloat(mg.value),
         unit: mg.unit,
       },
       na: {
-        value: parseFloat(na),
+        value: parseFloat(na.value),
         unit: na.unit,
       },
       k: {
-        value: parseFloat(k),
+        value: parseFloat(k.value),
         unit: k.unit,
       },
       f: {
-        value: parseFloat(f),
+        value: parseFloat(f.value),
         unit: f.unit,
       },
       sio2: {
-        value: parseFloat(sio2),
+        value: parseFloat(sio2.value),
         unit: sio2.unit,
       },
       prediction: predictionResult.data.prediction,

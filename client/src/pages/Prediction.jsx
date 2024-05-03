@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Flex,
+  FormControl,
   FormLabel,
   Heading,
   NumberDecrementStepper,
@@ -89,8 +90,6 @@ export default function Prediction() {
     sio2: { value: 0, unit: "µS/cm" },
   });
 
-  const format = (val) => val + `°`;
-
   useEffect(() => {
     if (showMap) {
       setForm({
@@ -114,8 +113,12 @@ export default function Prediction() {
     // eslint-disable-next-line
   }, [form.latitude, form.longitude]);
 
+  const format = (val) => val + "°";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("form", form);
 
     setForm({
       ...form,
@@ -203,28 +206,35 @@ export default function Prediction() {
                             py={{ base: "3", md: "3" }}
                             borderRadius={{ base: "lg", md: "xl" }}
                           >
-                            <Flex justify={"center"} align={"flex-end"}>
-                              <FormLabel htmlFor="latitude" w={"5rem"}>
-                                Latitude:
-                              </FormLabel>
-                              <NumberInput
-                                precision={2}
-                                value={format(form.latitude.value)}
-                                onChange={(valueString) => {
-                                  setForm({
-                                    ...form,
-                                    latitude: { value: valueString },
-                                  });
-                                }}
-                                isDisabled={showMap}
-                              >
-                                <NumberInputField className="disabled:border-gray-400" />
-                                <NumberInputStepper>
-                                  <NumberIncrementStepper />
-                                  <NumberDecrementStepper />
-                                </NumberInputStepper>
-                              </NumberInput>
-                            </Flex>
+                            <FormControl>
+                              <Flex justify={"center"} align={"flex-end"}>
+                                <FormLabel htmlFor="latitude" w={"5rem"}>
+                                  Latitude:
+                                </FormLabel>
+                                <NumberInput
+                                  precision={2}
+                                  min={-9999.99}
+                                  max={9999.99}
+                                  value={format(form.latitude.value)}
+                                  onChange={(valueString) => {
+                                    setForm({
+                                      ...form,
+                                      latitude: { value: valueString },
+                                    });
+                                  }}
+                                  isDisabled={showMap}
+                                >
+                                  <NumberInputField
+                                    pattern="(-)?[0-9]*(.[0-9]+)?°"
+                                    className="disabled:border-gray-400"
+                                  />
+                                  <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                  </NumberInputStepper>
+                                </NumberInput>
+                              </Flex>
+                            </FormControl>
                           </Box>
                           <Box
                             bg={"bg.surface"}
@@ -241,6 +251,8 @@ export default function Prediction() {
                               <NumberInput
                                 precision={2}
                                 value={format(form.longitude.value)}
+                                min={-9999.99}
+                                max={9999.99}
                                 onChange={(valueString) => {
                                   setForm({
                                     ...form,
@@ -249,7 +261,10 @@ export default function Prediction() {
                                 }}
                                 isDisabled={showMap}
                               >
-                                <NumberInputField className="disabled:border-gray-400" />
+                                <NumberInputField
+                                  pattern="(-)?[0-9]*(.[0-9]+)?°"
+                                  className="disabled:border-gray-400"
+                                />
                                 <NumberInputStepper>
                                   <NumberIncrementStepper />
                                   <NumberDecrementStepper />
