@@ -10,6 +10,7 @@ const {
   verifyUser,
   resetPassword,
   forgotPassword,
+  deleteUserAfterDelay,
 } = require("../controllers/auth.controller");
 
 // Route 1: Create user / SignUp
@@ -45,5 +46,8 @@ router.post("/forgotPassword", forgotPassword);
 
 // Route 7: Reset Password
 router.post("/resetPassword", resetPassword);
+
+// Route 8: Delete User After Delay
+router.get("/deleteUserAfterDelay", deleteUserAfterDelay);
 
 module.exports = router;

@@ -260,6 +260,28 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+const deleteUserAfterDelay = async (req, res) => {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+
+  try {
+    const deletedUser = await User.deleteMany({
+      createdAt: { $lt: oneHourAgo }, // Delete users created before 1 hour ago
+      verified: false, // Only delete unverified users
+    });
+
+    res.send({
+      success: true,
+      msg:
+        "Successfully deleted unverified users older than 1 hour. " +
+        deletedUser.deletedCount +
+        " users deleted",
+    });
+  } catch (error) {
+    console.error("Error deleting users:", error);
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+};
+
 module.exports = {
   createUser,
   verifyUser,
@@ -268,4 +290,5 @@ module.exports = {
   resetPassword,
   logoutUser,
   getUserDetails,
+  deleteUserAfterDelay,
 };
