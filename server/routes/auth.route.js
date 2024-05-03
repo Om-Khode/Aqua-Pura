@@ -48,6 +48,6 @@ router.post("/forgotPassword", forgotPassword);
 router.post("/resetPassword", resetPassword);
 
 // Route 8: Delete User After Delay
-router.get("/deleteUserAfterDelay", deleteUserAfterDelay);
+router.post("/deleteUserAfterDelay", deleteUserAfterDelay);
 
 module.exports = router;
