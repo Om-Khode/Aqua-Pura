@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Target the entire scrollbar */
+::-webkit-scrollbar {
+  width: 5px; /* Change width */
+  height: 5px; /* Change height */
+  background: transparent; /* Change background color */
+}
+
+/* Target the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #ccc; /* Change thumb color */
+  border-radius: 5px; /* Add rounded corners */
+}
+
+/* Target the track (the area where the thumb slides) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Change track color */
+  display: none;
+}
