@@ -14,7 +14,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import ChemicalInputFields from "../components/prediction/ChemicalInputFields";
 import axios from "axios";
