@@ -14,6 +14,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import ChemicalInputFields from "../components/prediction/ChemicalInputFields";
 import axios from "axios";
@@ -31,6 +32,13 @@ export default function Prediction() {
   const [fetched, setFetched] = useState(false);
 
   const [result, setResult] = useState(null);
+
+  const rangeOfDrinkingWater = {
+    0: "Excellent Range of Drinking Water Quality",
+    1: "Good Range of Drinking Water Quality",
+    2: "Fair Range of Drinking Water Quality",
+    3: "Poor Range of Drinking Water Quality",
+  };
 
   const location = useLocation();
 
@@ -136,7 +144,8 @@ export default function Prediction() {
         }
       );
       if (res.data.success) {
-        setResult(res.data.data.prediction);
+        const range = res.data.data.prediction;
+        setResult(rangeOfDrinkingWater[range]);
         toast.success(res.data.msg);
       } else {
         toast.error(res.data.msg);
@@ -299,12 +308,12 @@ export default function Prediction() {
                         borderRadius={{ base: "lg", md: "xl" }}
                       >
                         <Flex justify={"center"} align={"flex-end"}>
-                          <FormLabel htmlFor="prediction" w={"5rem"}>
-                            Prediction:
-                          </FormLabel>
-                          <NumberInput precision={2} isReadOnly value={result}>
-                            <NumberInputField />
-                          </NumberInput>
+                          <p justify={"center"} align={"center"}>
+                            Prediction:{" "}
+                            <span className="font-semibold text-center">
+                              {result}
+                            </span>
+                          </p>
                         </Flex>
                       </Box>
                     )}

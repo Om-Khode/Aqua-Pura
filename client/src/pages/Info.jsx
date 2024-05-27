@@ -52,6 +52,15 @@ export default function Info() {
 
   const user = useSelector((state) => state.user);
 
+  const [result, setResult] = useState("");
+
+  const rangeOfDrinkingWater = {
+    0: "Excellent Range of Drinking Water Quality",
+    1: "Good Range of Drinking Water Quality",
+    2: "Fair Range of Drinking Water Quality",
+    3: "Poor Range of Drinking Water Quality",
+  };
+
   useEffect(() => {
     if (user.isLoggedIn === false) {
       navigate("/");
@@ -69,6 +78,7 @@ export default function Info() {
         lat: res.data.latitude.value,
         lng: res.data.longitude.value,
       });
+      setResult(rangeOfDrinkingWater[res.data.prediction]);
       setFetched(true);
     } else {
       toast.error(res.msg);
@@ -198,6 +208,14 @@ export default function Info() {
                       borderRadius={{ base: "lg", md: "xl" }}
                     >
                       <Flex justify={"center"} align={"flex-end"}>
+                        <p justify={"center"} align={"center"}>
+                          Prediction:{" "}
+                          <span className="font-semibold text-center">
+                            {result}
+                          </span>
+                        </p>
+                      </Flex>
+                      {/* <Flex justify={"center"} align={"flex-end"}>
                         <FormLabel htmlFor="prediction" w={"5rem"}>
                           Prediction:
                         </FormLabel>
@@ -208,7 +226,7 @@ export default function Info() {
                         >
                           <NumberInputField />
                         </NumberInput>
-                      </Flex>
+                      </Flex> */}
                     </Box>
                     <Button
                       bg="blue.500"

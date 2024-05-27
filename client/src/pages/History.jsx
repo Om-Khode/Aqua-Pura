@@ -81,6 +81,13 @@ export default function History() {
 
   const [loading, setLoading] = useState(false);
 
+  const rangeOfDrinkingWater = {
+    0: "Excellent",
+    1: "Good",
+    2: "Fair",
+    3: "Poor",
+  };
+
   const handleDelete = async () => {
     setLoading(true);
     try {
@@ -136,7 +143,7 @@ export default function History() {
                   <Td>{index + 1}.</Td>
                   <Td>{prediction.longitude.value}</Td>
                   <Td>{prediction.latitude.value}</Td>
-                  <Td>{prediction.prediction}</Td>
+                  <Td>{rangeOfDrinkingWater[prediction.prediction]}</Td>
                   <Td>{dayjs(prediction.date).format("DD/MM/YYYY")}</Td>
                   <Td isNumeric>
                     <Button
