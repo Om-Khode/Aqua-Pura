@@ -50,7 +50,7 @@ const addPredictions = async (req, res) => {
     //   convertedValues
     // );
 
-    const sum = 0;
+    let sum = 0;
 
     for (const [key, value] of Object.entries(convertedValues)) {
       sum += value;
