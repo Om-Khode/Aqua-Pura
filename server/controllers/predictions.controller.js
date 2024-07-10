@@ -56,13 +56,14 @@ const addPredictions = async (req, res) => {
       sum += value;
     }
 
-    const average = sum / Object.keys(convertedValues).length;
-
     const predictionResult = {
       data: {
-        prediction: average % 4,
+        prediction: Math.floor(sum % 4),
       },
     };
+
+    console.log("sum: ", sum);
+    console.log(predictionResult.data.prediction);
 
     const prediction = new Predictions({
       user: req.user.id,
