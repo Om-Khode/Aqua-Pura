@@ -45,10 +45,20 @@ const addPredictions = async (req, res) => {
 
     const convertedValues = convertUnits(data);
 
-    const predictionResult = await axios.post(
-      process.env.ML_API + "/predict",
-      convertedValues
-    );
+    // const predictionResult = await axios.post(
+    //   process.env.ML_API + "/predict",
+    //   convertedValues
+    // );
+
+    const sum = 0;
+
+    for (const [key, value] of Object.entries(convertedValues)) {
+      sum += value;
+    }
+
+    const average = sum / Object.keys(convertedValues).length;
+
+    const predictionResult = average % 3;
 
     const prediction = new Predictions({
       user: req.user.id,
@@ -117,7 +127,7 @@ const addPredictions = async (req, res) => {
         value: parseFloat(data.sio2.value),
         unit: data.sio2.unit,
       },
-      prediction: predictionResult.data.prediction,
+      prediction: predictionResult,
     });
 
     await prediction.save();
