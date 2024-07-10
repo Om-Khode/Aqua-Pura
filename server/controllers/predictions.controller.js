@@ -58,7 +58,11 @@ const addPredictions = async (req, res) => {
 
     const average = sum / Object.keys(convertedValues).length;
 
-    const predictionResult = average % 3;
+    const predictionResult = {
+      data: {
+        prediction: average % 4,
+      },
+    };
 
     const prediction = new Predictions({
       user: req.user.id,
@@ -127,7 +131,7 @@ const addPredictions = async (req, res) => {
         value: parseFloat(data.sio2.value),
         unit: data.sio2.unit,
       },
-      prediction: predictionResult,
+      prediction: predictionResult.data.prediction,
     });
 
     await prediction.save();
