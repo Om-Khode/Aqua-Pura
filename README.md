@@ -82,9 +82,11 @@ cd backend && npm install
 
 5. Start the development server:
 
-In the `client` directory, run `npm start` to start the Node.js server.
-In the `server` directory, run `npm start` to start the React development server.
-In the `ml_api` directory, run `py app.py` to start the ML server.
+    In the `client` directory, run `npm start` to start the Node.js server.
+    
+    In the `server` directory, run `npm start` to start the React development server.
+    
+    In the `ml_api` directory, run `py app.py` to start the ML server.
 
 Open your browser and navigate to `http://localhost:3000` to access the Aqua Pura.
 
