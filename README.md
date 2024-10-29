@@ -94,8 +94,8 @@ Open your browser and navigate to `http://localhost:3000` to access the Aqua Pur
 
 To explore the Aqua Pura app without creating a new account, use the following test credentials to log in:
 
-- Email: testuser@aquapura.com
-- Password: testpassword123
+- Email: test.dev20154@gmail.com
+- Password: Test@123
 
 Once logged in, you can explore the app features, make predictions, and save results. If you wish, you can create a personal account for continued use.
 
