@@ -90,6 +90,15 @@ cd backend && npm install
 
 Open your browser and navigate to `http://localhost:3000` to access the Aqua Pura.
 
+## Test Credentials
+
+To explore the Aqua Pura app without creating a new account, use the following test credentials to log in:
+
+- Email: testuser@aquapura.com
+- Password: testpassword123
+
+Once logged in, you can explore the app features, make predictions, and save results. If you wish, you can create a personal account for continued use.
+
 ## Contributors
 
 Aqua Pura was developed by Om Khode and is open to contributions from the community. If you have any suggestions for improvements or encounter any issues, please create a new issue on the GitHub repository.
